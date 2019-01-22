@@ -7,8 +7,9 @@
 
 /*グループ名 , 0:GLOBAL,1:LOCAL*/
 enum group_name{
-  GLOBAL,
-  LOCAL
+  MONO,
+  MULTI,
+  NOT
 };
 
 enum hub_or_authority{
@@ -17,7 +18,8 @@ enum hub_or_authority{
 };
 
 struct Node_t{
-	int node_number;						/*順番通りor別ファイルで与える*/
+  int id;                     /*順番通り*/
+	int node_number;						/*別ファイルで与える*/
   int belong_hub;            	/*hubかどうか*/
   int belong_authority;       /*authorityかどうか*/ 
   int authority_group_name;   /*authority内のグループ名*/
@@ -37,7 +39,8 @@ struct group_total_number_t{
 
 
 extern void input_data(struct Node_t nod[ONE_SIDE]);
-extern void decide_group(void);
+extern void make_adlist(struct Node_t nod[ONE_SIDE]);
+extern void decide_group(struct Node_t nod[ONE_SIDE]);
 extern void count_total(void);
 extern void calculate_authority(void);
 extern void calculate_hub(void);

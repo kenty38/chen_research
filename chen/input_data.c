@@ -1,7 +1,7 @@
 #include"function.h"
 
 /*行列の要素をコピーするための関数*/
-void input_ingredient(int matrix[ONE_SIDE][ONE_SIDE]);
+void input_ingredient(int name[ONE_SIDE],int matrix[ONE_SIDE][ONE_SIDE],struct Node_t nod[ONE_SIDE]);
 
 /*hubかauthorityかの情報を入れ、更に出次数と入次数を入力する関数*/
 void decide_side_and_count_degree(int matrix[ONE_SIDE][ONE_SIDE],struct Node_t nod[ONE_SIDE]);
@@ -22,7 +22,7 @@ void input_data(struct Node_t nod[ONE_SIDE]){
 	int matrix_number[ONE_SIDE]={1,2,3,5,6,10};
 	int matrix_copy[ONE_SIDE][ONE_SIDE];
 	
-	input_ingredient(matrix_copy);
+	input_ingredient(matrix_number,matrix_copy,nod);
 	
 	decide_side_and_count_degree(matrix_copy,nod);
 	
@@ -37,7 +37,7 @@ void input_data(struct Node_t nod[ONE_SIDE]){
 
 /*-------------------------------------------------------------------------------*/
 
-void input_ingredient(int matrix[ONE_SIDE][ONE_SIDE]){
+void input_ingredient(int name[ONE_SIDE],int matrix[ONE_SIDE][ONE_SIDE],struct Node_t nod[ONE_SIDE]){
 	FILE *fp;
 	int ingredient;
 	int i=0,j=0;
@@ -49,6 +49,10 @@ void input_ingredient(int matrix[ONE_SIDE][ONE_SIDE]){
 		exit(1);
 	}
 	
+	for(i=0;i<ONE_SIDE;i++)
+	  nod[i].node_number=name[i];
+	
+	i=0;
 	while((ingredient = fgetc(fp))!=EOF){
 		if(ingredient == '\n'){
 			j=0;
@@ -143,7 +147,7 @@ void confirm_side_and_list(int name[ONE_SIDE],struct Node_t nod[ONE_SIDE]){
 	
 	puts("<out>");
 	for(i=0;i<ONE_SIDE;i++){
-		printf("%d:",name[i]);
+		printf("%2d:",name[i]);
 		for(j=0;j<nod[i].out_number;j++){
 			printf("%d",nod[i].out_list[j]);
 			if(j!=nod[i].out_number-1)
@@ -154,7 +158,7 @@ void confirm_side_and_list(int name[ONE_SIDE],struct Node_t nod[ONE_SIDE]){
 
 	puts("<in>");
 	for(i=0;i<ONE_SIDE;i++){
-		printf("%d:",name[i]);
+		printf("%2d:",name[i]);
 		for(j=0;j<nod[i].in_number;j++){
 			printf("%d",nod[i].in_list[j]);
 			if(j!=nod[i].in_number-1)
