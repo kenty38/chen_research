@@ -1,3 +1,5 @@
+
+
 #include"function.h"
 
 void decide_group(struct Node_t nod[ONE_SIDE]){

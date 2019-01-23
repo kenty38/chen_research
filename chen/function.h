@@ -3,7 +3,8 @@
 #include<stdlib.h>
 
 #define ONE_SIDE 6
-#define FILENAME "6_6.csv"
+#define INPUT "6_6.csv"
+#define OUTPUT "output.csv"
 
 /*グループ名 , 0:GLOBAL,1:LOCAL*/
 enum group_name{
@@ -27,21 +28,24 @@ struct Node_t{
   int in_number;              /*自分が指されている数*/
   int *out_list;							/*自分の先の点のリスト*/
   int *in_list;								/*自分を指す点のリスト*/
+  double authority_value;			/*authorityの値*/
 };
 
 struct group_total_number_t{
-  int authority_total_node;
-  int global_total_node;
-  int global_group_in;
-  int local_group_node;
-  int local_group_in;
+  int authority_total_node;		/*authorityのノードの総数*/
+  int multi_node;							/*MULTIグループのノードの数*/
+  int multi_in;								/*MULTIグループの入次数*/
+  int mono_node;							/*MONOグループのノードの数*/
+  int mono_in;								/*MONOグループの入次数*/
 };
 
 
 extern void input_data(struct Node_t nod[ONE_SIDE]);
 extern void make_adlist(struct Node_t nod[ONE_SIDE]);
 extern void decide_group(struct Node_t nod[ONE_SIDE]);
-extern void count_total(void);
-extern void calculate_authority(void);
+extern void count_total(struct Node_t nod[ONE_SIDE],struct group_total_number_t *gtn);
+extern void calculate_authority(struct Node_t nod[ONE_SIDE],struct group_total_number_t gtn);
 extern void calculate_hub(void);
-extern void output_data(void);
+extern void output_data(struct Node_t nod[ONE_SIDE]);
+
+

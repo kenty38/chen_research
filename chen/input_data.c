@@ -7,13 +7,13 @@ void input_ingredient(int name[ONE_SIDE],int matrix[ONE_SIDE][ONE_SIDE],struct N
 void decide_side_and_count_degree(int matrix[ONE_SIDE][ONE_SIDE],struct Node_t nod[ONE_SIDE]);
 
 /*出次数の隣接リストの生成*/
-void make_out_list(int name[ONE_SIDE],int matrix[ONE_SIDE][ONE_SIDE],struct Node_t nod[ONE_SIDE]);
+void make_out_list(int matrix[ONE_SIDE][ONE_SIDE],struct Node_t nod[ONE_SIDE]);
 
 /*入次数の隣接リストの生成*/
-void make_in_list(int name[ONE_SIDE],int matrix[ONE_SIDE][ONE_SIDE],struct Node_t nod[ONE_SIDE]);
+void make_in_list(int matrix[ONE_SIDE][ONE_SIDE],struct Node_t nod[ONE_SIDE]);
 
-void confirm_matrix(int name[ONE_SIDE],int matrix[ONE_SIDE][ONE_SIDE]);
-void confirm_side_and_list(int name[ONE_SIDE],struct Node_t nod[ONE_SIDE]);
+void confirm_matrix(int matrix[ONE_SIDE][ONE_SIDE],struct Node_t nod[ONE_SIDE]);
+void confirm_side_and_list(struct Node_t nod[ONE_SIDE]);
 
 /*-------------------------------------------------------------------------------*/
 
@@ -26,12 +26,12 @@ void input_data(struct Node_t nod[ONE_SIDE]){
 	
 	decide_side_and_count_degree(matrix_copy,nod);
 	
-	make_out_list(matrix_number,matrix_copy,nod);
+	make_out_list(matrix_copy,nod);
 	
-	make_in_list(matrix_number,matrix_copy,nod);
+	make_in_list(matrix_copy,nod);
 	
-	confirm_side_and_list(matrix_number,nod);
-	confirm_matrix(matrix_number,matrix_copy);
+	//confirm_side_and_list(nod);
+	//confirm_matrix(matrix_copy,nod);
 }
 
 
@@ -42,10 +42,10 @@ void input_ingredient(int name[ONE_SIDE],int matrix[ONE_SIDE][ONE_SIDE],struct N
 	int ingredient;
 	int i=0,j=0;
 	
-	fp=fopen(FILENAME,"r");
+	fp=fopen(INPUT,"r");
 	
 	if(fp==NULL){
-		printf("%s do not open\n",FILENAME);
+		printf("%s do not open\n",INPUT);
 		exit(1);
 	}
 	
@@ -97,8 +97,7 @@ void decide_side_and_count_degree(int matrix[ONE_SIDE][ONE_SIDE],struct Node_t n
 	}
 }
 
-void make_out_list(int name[ONE_SIDE],int matrix[ONE_SIDE][ONE_SIDE],
-									 struct Node_t nod[ONE_SIDE]){
+void make_out_list(int matrix[ONE_SIDE][ONE_SIDE],struct Node_t nod[ONE_SIDE]){
 	int i=0,j=0;
 	int count=0;
 	
@@ -107,7 +106,7 @@ void make_out_list(int name[ONE_SIDE],int matrix[ONE_SIDE][ONE_SIDE],
 		
 		for(j=0;j<ONE_SIDE;j++){
 			if(matrix[i][j]==1){
-				nod[i].out_list[count]=name[j];
+				nod[i].out_list[count]=nod[j].node_number;
 				count++;
 			}
 			if(count == nod[i].out_number){
@@ -118,8 +117,7 @@ void make_out_list(int name[ONE_SIDE],int matrix[ONE_SIDE][ONE_SIDE],
 	}
 }
 
-void make_in_list(int name[ONE_SIDE],int matrix[ONE_SIDE][ONE_SIDE],
-									 struct Node_t nod[ONE_SIDE]){
+void make_in_list(int matrix[ONE_SIDE][ONE_SIDE],struct Node_t nod[ONE_SIDE]){
 	int i=0,j=0;
 	int count=0;
 	
@@ -128,7 +126,7 @@ void make_in_list(int name[ONE_SIDE],int matrix[ONE_SIDE][ONE_SIDE],
 		
 		for(j=0;j<ONE_SIDE;j++){
 			if(matrix[j][i]==1){
-				nod[i].in_list[count]=name[j];
+				nod[i].in_list[count]=nod[j].node_number;
 				count++;
 			}
 			if(count == nod[i].in_number){
@@ -142,12 +140,12 @@ void make_in_list(int name[ONE_SIDE],int matrix[ONE_SIDE][ONE_SIDE],
 
 
 
-void confirm_side_and_list(int name[ONE_SIDE],struct Node_t nod[ONE_SIDE]){
+void confirm_side_and_list(struct Node_t nod[ONE_SIDE]){
 	int i,j;
 	
 	puts("<out>");
 	for(i=0;i<ONE_SIDE;i++){
-		printf("%2d:",name[i]);
+		printf("%2d:",nod[i].node_number);
 		for(j=0;j<nod[i].out_number;j++){
 			printf("%d",nod[i].out_list[j]);
 			if(j!=nod[i].out_number-1)
@@ -158,7 +156,7 @@ void confirm_side_and_list(int name[ONE_SIDE],struct Node_t nod[ONE_SIDE]){
 
 	puts("<in>");
 	for(i=0;i<ONE_SIDE;i++){
-		printf("%2d:",name[i]);
+		printf("%2d:",nod[i].node_number);
 		for(j=0;j<nod[i].in_number;j++){
 			printf("%d",nod[i].in_list[j]);
 			if(j!=nod[i].in_number-1)
@@ -169,15 +167,15 @@ void confirm_side_and_list(int name[ONE_SIDE],struct Node_t nod[ONE_SIDE]){
 	
 	for(i=0;i<ONE_SIDE;i++)
 		printf("%2d:hub=%d , authority=%d , out_number=%d , in_number=%d\n",
-						name[i],nod[i].belong_hub,nod[i].belong_authority,
+						nod[i].node_number,nod[i].belong_hub,nod[i].belong_authority,
 						nod[i].out_number,nod[i].in_number);
 }
 
-void confirm_matrix(int name[ONE_SIDE],int matrix[ONE_SIDE][ONE_SIDE]){
+void confirm_matrix(int matrix[ONE_SIDE][ONE_SIDE],struct Node_t nod[ONE_SIDE]){
 	int i,j;
 	
 	for(i=0;i<ONE_SIDE;i++){
-		printf("%2d:",name[i]);
+		printf("%2d:",nod[i].node_number);
 		for(j=0;j<ONE_SIDE;j++){
 			printf("%d",matrix[i][j]);
 			if(j!=ONE_SIDE-1)
